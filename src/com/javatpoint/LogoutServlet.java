@@ -16,9 +16,25 @@ public class LogoutServlet extends HttpServlet {
 		
 		request.getRequestDispatcher("link.html").include(request, response);
 		
+		/*
+		 * 
+		 * Uso de cookies
+		 * 
+		 * Se guarda el nombre de usuario en la cookie para identificar 
+		 * al usuario para posteriores solicitudes.
+		 * 
+		 * El  inseguro porque un atacante con acceso a la máquina del cliente puede obtener 
+		 * esta información directamente en la parte del cliente.
+		 * 
+		 *
+		 * En este caso es solo el name, por lo que no hace falta hacer un random de la contrasenia
+		 */
+		
 		Cookie ck=new Cookie("name","");
 		ck.setMaxAge(0);
 		response.addCookie(ck);
+		
+	
 		
 		out.print("you are successfully logged out!");
 	}

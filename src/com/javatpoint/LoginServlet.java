@@ -67,10 +67,11 @@ public class LoginServlet extends HttpServlet {
 			 * El  inseguro porque un atacante con acceso a la máquina del cliente puede obtener 
 			 * esta información directamente en la parte del cliente.
 			 * 
+			 * En este caso es solo el name, por lo que no hace falta hacer un random de la contrasenia
+			 * 
 			 */
 			
-			//Cookie ck=new Cookie("name",name);
-			//response.addCookie(ck);
+			
 			boolean validated = false;
 			
 			if(request.getCookies()[0]!=null && request.getCookies()[0].getValue()!=null) {
@@ -83,6 +84,9 @@ public class LoginServlet extends HttpServlet {
 				if(!validated) {
 					out.print("sorry, username or password error!");
 				}
+				
+				Cookie ck=new Cookie("name",name);
+				response.addCookie(ck);
 			}
 			
 			
@@ -102,6 +106,8 @@ public class LoginServlet extends HttpServlet {
 	
 	/*
 	 * La contrasenia relmente se llamaria de bbdd cifrada como dijimos antes
+	 * Se utiliza por ejemplo, cifrado con SHA-256 para simular que las contrasenias
+	 * se encriptan y se almacenan encriptaas a la bbdd 
 	 */
 
 	private char[] cifrarContrasenia(char[] pass) {
