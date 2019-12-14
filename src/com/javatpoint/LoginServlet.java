@@ -16,13 +16,19 @@ public class LoginServlet extends HttpServlet {
 		response.setContentType("text/html");
 		PrintWriter out=response.getWriter();
 		
+		if(!request.getParameter("content").matches("[\\w*\\s*]*")){
+			request.setAttribute("error", "Please enter only letters, numbers, and spaces.");
+			request.getRequestDispatcher("WEB-INF/jsp/render.jsp").forward(request,response);
+			return;
+		}
 		request.getRequestDispatcher("link.html").include(request, response);
 		
 		/*
          * No existe un metodo para comprobar las entradas del usuario
          * 
          * Hay que sanitizar las entradas y limpiar
-         * 
+         * La mejor manera de sanitizar entradas para prevenir XSS
+         * en una aplicacion web es usar whitelist, para que solo pueda entrar letras numeros y espacios
          * 
          * A parte, se ha leido el nombre y la contrasenia y se han almacenado en un string
          * el nombre y la contrasenia estaran expuestos hasta que el recolector de basura pase
@@ -111,12 +117,15 @@ public class LoginServlet extends HttpServlet {
 	 */
 
 	private char[] cifrarContrasenia(char[] pass) {
+
 		MessageDigest md = null;
 		try {
 			md = MessageDigest.getInstance("SHA-256");
 		} 
 		catch (NoSuchAlgorithmException e) {		
-			e.printStackTrace();
+			//e.printStackTrace();
+			//ERR01-J. Do not allow exceptions to expose sensitive information
+			System.out.print("sorry, username or password error!");
 			return null;
 		}
 		    
